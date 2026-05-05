@@ -14,22 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "quantum.h"
 
-#define WS2812_SPI_DRIVER                   SPID1
-#define WS2812_SPI_MOSI_PAL_MODE            5
+#ifdef RGB_MATRIX_ENABLE
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
-#define VIA_EEPROM_LAYOUT_OPTIONS_SIZE      2
+    if (host_keyboard_led_state().caps_lock) {
+        for (uint8_t i = led_min; i <= led_max; i++) {
+            if (g_led_config.flags[i] & LED_FLAG_INDICATOR) {
+                rgb_matrix_set_color(i, RGB_RED);
+            }
+        }
+    }
 
-#define STM32_ONBOARD_EEPROM_SIZE           1024
-
-#ifdef AUDIO_ENABLE
-# define STARTUP_SONG SONG(STARTUP_SOUND)
+    return true;
+}
 #endif
-
-#define AUDIO_PIN A4
-#define AUDIO_CLICKY
-
-#define RGB_MATRIX_KEYPRESSES
-#define RGB_MATRIX_REACT_ON_KEYUP
-#define RGB_MATRIX_INDICATOR_SET_REMAP
